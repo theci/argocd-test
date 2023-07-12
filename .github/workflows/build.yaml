@@ -58,7 +58,7 @@ jobs:
           cd /root/environment/manifest/k8s-manifest-repo/overlays/dev/
           kustomize edit set image \${{ steps.login-ecr.outputs.registry}}/\${{ steps.image-info.outputs.ecr_repository }}=\${{ steps.login-ecr.outputs.registry}}/\${{ steps.image-info.outputs.ecr_repository }}:\${{ steps.image-info.outputs.image_tag }}
           cat kustomization.yaml
-		  
+
       - name: Commit files
         run: |
           cd /root/environment/manifest/k8s-manifest-repo/

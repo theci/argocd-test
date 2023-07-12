@@ -47,21 +47,21 @@ jobs:
         with:
           repository: $GITHUB_USERNAME/k8s-manifest-repo
           ref: main
-          token: \${{ secrets.ACTION_TOKEN }}
-          path: /root/environment/manifest/k8s-manifest-repo/
+          token: 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
+          path: manifest/k8s-manifest-repo/
 
       - name: Update Kubernetes resources
         run: |
           echo \${{ steps.login-ecr.outputs.registry }}
           echo \${{ steps.image-info.outputs.ecr_repository }}
           echo \${{ steps.image-info.outputs.image_tag }}
-          cd /root/environment/manifest/k8s-manifest-repo/overlays/dev/
+          cd manifest/k8s-manifest-repo/overlays/dev/
           kustomize edit set image \${{ steps.login-ecr.outputs.registry}}/\${{ steps.image-info.outputs.ecr_repository }}=\${{ steps.login-ecr.outputs.registry}}/\${{ steps.image-info.outputs.ecr_repository }}:\${{ steps.image-info.outputs.image_tag }}
           cat kustomization.yaml
 
       - name: Commit files
         run: |
-          cd /root/environment/manifest/k8s-manifest-repo/
+          cd manifest/k8s-manifest-repo/
           git config --global user.email "github-actions@github.com"
           git config --global user.name "github-actions"
           git commit -am "Update image tag"

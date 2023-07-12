@@ -45,7 +45,7 @@ jobs:
       - name: Checkout kustomize repository
         uses: actions/checkout@v2
         with:
-          repository: $GITHUB_USERNAME/k8s-manifest-repo
+          repository: theci/k8s-manifest-repo
           ref: main
           token: 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
           path: manifest/k8s-manifest-repo/

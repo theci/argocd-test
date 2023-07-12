@@ -38,32 +38,14 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-
-      - name: Setup Kustomize
-        uses: imranismail/setup-kustomize@v1
-
-      - name: Checkout kustomize repository
-        uses: actions/checkout@v2
+      - name: Update Version
+        run: |
+            git_hash=$(git rev-parse --short "$GITHUB_SHA")
+            version=$(cat ./charts/helm-example/values.yaml | grep version: | awk '{print $2}')
+            sed -i "s/$version/${GITHUB_REF##*/}-$git_hash/" ./charts/helm-example/values.yaml
+          
+      - name: Commit and push changes
+        uses: devops-infra/action-commit-push@v0.3
         with:
-
-          repository: theci/k8s-manifest-repo
-          ref: master
-          token: \${{ secrets.ACTION_TOKEN }}
-          path: k8s-manifest-repo
-
-      - name: Update Kubernetes resources
-        run: |
-          echo \${{ steps.login-ecr.outputs.registry }}
-          echo \${{ steps.image-info.outputs.ecr_repository }}
-          echo \${{ steps.image-info.outputs.image_tag }}
-          cd k8s-manifest-repo/overlays/dev/
-          kustomize edit set image \${{ steps.login-ecr.outputs.registry}}/\${{ steps.image-info.outputs.ecr_repository }}=\${{ steps.login-ecr.outputs.registry}}/\${{ steps.image-info.outputs.ecr_repository }}:\${{ steps.image-info.outputs.image_tag }}
-          cat kustomization.yaml
-
-      - name: Commit files
-        run: |
-          cd k8s-manifest-repo
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "github-actions"
-          git commit -am "Update image tag"
-          git push origin master
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          commit_message: Version updated

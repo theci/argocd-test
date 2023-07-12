@@ -8,6 +8,7 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
@@ -37,7 +38,7 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-       - name: Commit files
+      - name: Commit files
         run: |
           cd k8s-manifest-repo
           git config --global user.email "github-actions@github.com"

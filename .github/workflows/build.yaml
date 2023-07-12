@@ -48,7 +48,7 @@ jobs:
           repository: theci/k8s-manifes-repo
           ref: master
           token: \${{ secrets.ACTION_TOKEN }}
-          path: manifest/k8s-manifest-repo/
+          path: k8s-manifes-repo/
 
       - name: Update Kubernetes resources
         run: |
@@ -61,7 +61,7 @@ jobs:
 
       - name: Commit files
         run: |
-          cd manifest/k8s-manifest-repo/
+          cd k8s-manifes-repo/
           git config --global user.email "github-actions@github.com"
           git config --global user.name "github-actions"
           git commit -am "Update image tag"

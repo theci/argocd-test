@@ -45,6 +45,7 @@ jobs:
       - name: Checkout kustomize repository
         uses: actions/checkout@v2
         with:
+
           repository: theci/k8s-manifest-repo
           ref: master
           token: \${{ secrets.ACTION_TOKEN }}

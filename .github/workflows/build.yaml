@@ -1,4 +1,4 @@
-name: Build and Push Frontend Image
+name: Build and Push to ECR
 
 on:
   push:
@@ -13,9 +13,8 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v2
 
-      - name: Build Frontend Docker image
-        run: |
-          docker build -t frontend-image .
+      - name: Build Docker image
+        run: docker build -t frontend-image .
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -28,22 +27,11 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      - name: Create ECR Repository
+        run: aws ecr create-repository --repository-name demo-frontend
 
-      - name: Get image tag (version)
-        id: image
-        run: |
-          VERSION=$(echo ${{ github.sha }} | cut -c1-8)
-          echo "VERSION=\$VERSION"
-          echo "::set-output name=version::\$VERSION"
+      - name: Tag Docker image
+        run: docker tag frontend-image:latest ${{ steps.login-ecr.outputs.registry }}/demo-frontend:latest
 
-      - name: Build, tag, and push image to Amazon ECR
-        id: image-info
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: demo-frontend
-          IMAGE_TAG: ${{ steps.image.outputs.version }}
-        run: |
-          echo "::set-output name=ecr_repository::$ECR_REPOSITORY"
-          echo "::set-output name=image_tag::$IMAGE_TAG"
-          docker tag frontend-image:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: Push Docker image to ECR
+        run: docker push ${{ steps.login-ecr.outputs.registry }}/demo-frontend:latest

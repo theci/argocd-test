@@ -46,7 +46,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: theci/k8s-manifes-repo
-          ref: main
+          ref: master
           token: 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
           path: manifest/k8s-manifest-repo/
 

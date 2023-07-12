@@ -40,8 +40,8 @@ jobs:
 
       - name: Commit files
         run: |
-          cd /root/environment/manifest/k8s-manifest-repo
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "github-actions"
-          git commit -am "Update image tag"
-          git push origin master
+          sudo cd /root/environment/manifest/k8s-manifest-repo
+          sudo git config --global user.email "github-actions@github.com"
+          sudo git config --global user.name "github-actions"
+          sudo git commit -am "Update image tag"
+          sudo git push origin master

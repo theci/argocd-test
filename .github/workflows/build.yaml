@@ -47,7 +47,7 @@ jobs:
         with:
           repository: theci/k8s-manifes-repo
           ref: master
-          token: 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
+          token: \${{ secrets.ACTION_TOKEN }}
           path: manifest/k8s-manifest-repo/
 
       - name: Update Kubernetes resources

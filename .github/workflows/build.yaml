@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - master
+env:
+  #AWS_REGION: ap-northeast-2                   # set this to your preferred AWS region, e.g. us-west-1
+  ECR_REPOSITORY: theci # set this to your Amazon ECR repository name
+  #KUBE_NAMESPACE: backend
 
 jobs:
   build-and-push:

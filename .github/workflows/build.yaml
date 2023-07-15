@@ -68,7 +68,8 @@ jobs:
           #cd k8s-manifest-repo/overlays/prd
           #kustomize edit set image ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
           cd k8s-manifest-repo/resources
-          sed -i "s#image: #image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}#" deployment.yaml
+          #sed -i "s#image: #image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}#" deployment.yaml
+          sed -i -E "s#(image: )[^[:space:]]+#\1${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}#" deployment.yaml
           #cat kustomization.yaml
           
       - name: Commit files

@@ -69,7 +69,7 @@ jobs:
           #kustomize edit set image ${{ steps.login-ecr.outputs.registry}}/${{ steps.image-info.outputs.ecr_repository }}=${{ steps.login-ecr.outputs.registry}}/${{ steps.image-info.outputs.ecr_repository }}:${{ steps.image-info.outputs.image_tag }}
           #kustomize edit set image ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
           cd k8s-manifest-repo/resources
-          sed -i 's#image: your-image-name#image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}#' deployment.yaml
+          kustomize edit set image deployment.yaml your-new-image-name=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
           cat kustomization.yaml
           
       - name: Commit files
